@@ -76,8 +76,8 @@ void  mostrarFila(Fila *f){
 void menu(){
 
     char texto[] =
-                   " 1 - Jogar peça \n"
-                   " 2 - Remover peça \n"
+                   " 1 - Inserir peça  (enqueue)\n"  //Adiciona uma nova peça no final da fila
+                   " 2 - Remover peça (dequeue) \n"  //Remove a peça que está na frente da fila
                    " 3 - Exibir peças \n"
                    " 4 - Sair \n";
 
@@ -87,53 +87,54 @@ void menu(){
    
 }
 
+Tetris gerarPecas(){
+
+    static int id = 1; 
+    char tipos[] = {'I','O','T','L','S'};
+    
+    int totalTipos = 5;
+
+    Tetris nova;
+    nova.nome = tipos[rand() % totalTipos];
+    nova.id  = id++;
+
+    return nova;
+}
+
 
 int main() {
-
-    // 🧩 Nível Novato: Fila de Peças Futuras
-    //
-    // - Crie uma struct Peca com os campos: tipo (char) e id (int).
-    // - Implemente uma fila circular com capacidade para 5 peças.
-    // - Crie funções como inicializarFila(), enqueue(), dequeue(), filaCheia(), filaVazia().
-    // - Cada peça deve ser gerada automaticamente com um tipo aleatório e id sequencial.
-    // - Exiba a fila após cada ação com uma função mostrarFila().
-    // - Use um menu com opções como:
-    //      1 - Jogar peça (remover da frente)
-    //      0 - Sair
-    // - A cada remoção, insira uma nova peça ao final da fila.
 
 
     Fila f;
     iniciarFila(&f);
 
-    Tetris t1 = {'I', 1};
-    Tetris t2 = {'O', 2};
-    Tetris t3 = {'T', 3};
-    Tetris t4 = {'L', 4};
+    for(int i = 0; i < MAX;i++){
+        inserir(&f,gerarPecas());
+    }
 
-    inserir(&f,t1);
-    inserir(&f,t2);
-    inserir(&f,t3);
-    inserir(&f,t4);
 
-   int opcao;
 
-    while (opcao != 4) {
+   int opcao = 0;
 
     mostrarFila(&f);  
+
+    while (opcao != 5) {
+
+  
     menu();
     printf("Escolha uma opção: \n");
     scanf("%d", &opcao);
 
 
     switch (opcao) {
+
     case 1:
 
     char nome_peca;
     int id_peca;
 
     printf("Digite nome da peça: \n ");
-    scanf("%c", &nome_peca);
+    scanf(" %c", &nome_peca);
     printf("Digite id da peça: \n");
     scanf("%d", &id_peca);
     
@@ -142,7 +143,27 @@ int main() {
     inserir(&f,t_user);
     mostrarFila(&f);
 
-        break;
+    break;
+
+    case 2:
+
+    Tetris removida;
+    remover(&f, &removida);
+    printf("Peça removida [%c %d] \n",removida.nome,removida.id);
+    mostrarFila(&f);
+    break;
+
+    case 3:
+
+    printf("\n");
+    printf("Estado atual da fila: \n");
+    mostrarFila(&f);
+    break;
+
+    case 4:
+
+    printf("Saindo...");  
+    break;
     
     default:
         break;
